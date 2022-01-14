@@ -21,9 +21,6 @@ do
       t=$pomo_time
       breaking=0
       on_task=1
-    elif [ $work -eq 102 ]
-    then
-      exit 1
     else
       exit 1
     fi
