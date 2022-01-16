@@ -3,12 +3,18 @@ pom=1;
 break_time=5;
 pomo_time=15;
 t=$pomo_time;
+m=60
 breaking=0;
 on_task=1;
 while :;
 do
   if [ $breaking -eq 1 ]
   then
+    for i in {0..1};
+    do
+      printf '\7';
+      sleep 0.1;
+    done;
     xmessage -buttons work,quit "get back to work."
     work=$?
     if [ $work -eq 101 ]
@@ -36,23 +42,23 @@ do
     if [[ $t -eq $pomo_time && rando -lt 40 ]]
     then
       rando=$(( $RANDOM % ( $t * 2 / 4 ) + ( $t / 4 ) ))
-      sleep $(($rando*60));
+      sleep $(($rando*$m));
 
       for i in {0..1};
       do
         printf '\7';
         sleep 0.1;
       done;
-      xmessage -buttons yes,no -timeout 30 "are you distracted?"
-      if [ $? -eq 101 ]
+      xmessage -buttons no,yes -timeout 30 "are you distracted? remember: if you lie, your life will not get better."
+      if [ $? -eq 102 ]
       then
         t=$break_time
         on_task=0
       else
-        sleep $(( ( $t - $rando ) * 60 ))
+        sleep $(( ( $t - $rando ) * $m ))
       fi
     else
-      sleep $(($t*60));
+      sleep $(($t*$m));
     fi
 
     if [ $t -eq $break_time ]
@@ -64,8 +70,8 @@ do
         printf '\7';
         sleep 0.1;
       done;
-      xmessage -buttons break,no -timeout 7 "take a break."
-      if [ $? -eq 101 ]
+      xmessage -buttons no,break -timeout 7 "take a break."
+      if [ $? -eq 102 ]
       then
         t=$break_time
       else
